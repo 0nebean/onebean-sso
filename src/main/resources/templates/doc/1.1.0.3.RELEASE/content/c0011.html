@@ -1,0 +1,205 @@
+<h2>条件查询API</h2>
+<p>在Kepler中所有的单表查询都可以通过查询API来实现，无需额外实现任何方法和sql语句。</p>
+<p>在之前设计原理的章节里我们介绍了该功能的<a onclick="routingPage('/content/1.1.0.3.RELEASE/a0003#paragraph2')">实现原理</a>，这里我们将介绍一下它如何工作。</p>
+<ul>
+    <li><a href="#paragraph1">API的结构</a><br><br></li>
+    <li><a href="#paragraph2">无需注入即可调用</a><br><br></li>
+    <li><a href="#paragraph3">通过调用API实现自定义查询demo</a><br><br></li>
+    <li><a href="#paragraph4">查询条件表达式</a><br><br></li>
+</ul>
+
+<blockquote id="paragraph1">API的结构</blockquote>
+<p>在我们项目结构中dao，service，serviceImpl，controller都有其对应的基类或基础接口如下：</p>
+<ul>
+
+    <li><code>net.onebean.core.BaseDao ==&gt; dao</code><br><br></li>
+    <li><code>net.onebean.core.BaseBiz ==&gt; serviceImpl</code><br><br></li>
+    <li><code>net.onebean.core.IBaseBiz ==&gt; service</code><br><br></li>
+    <li><code>net.onebean....BaseController ==&gt; controller</code><br><br></li>
+</ul>
+
+<p>BaseDao接口继承了SqlMapper接口，mybatis配置中指定了markerInterface为SqlMapper，那就意味着所有SqlMapper的派生类都将是mybatis的接口。</p>
+<p>作为顶层的mybatis接口，该接口定义了以下方法，且都已经被实现。</p>
+<ul>
+    <li>find</li>
+    <li>findById</li>
+    <li>add</li>
+    <li>update</li>
+    <li>delete</li>
+    <li>deleteById</li>
+    <li>getMaxId</li>
+    <li>deleteByIds</li>
+    <li>updateBatch</li>
+    <li>searchCount</li>
+    <li>search</li>
+    <li>searchEntity</li>
+</ul>
+<p>实现过程参见这里
+    <a href="javascript:;" onclick="routingPage('/content/1.1.0.3.RELEASE/a0003#paragraph1')">泛型的增删改查的实现</a>。
+</p>
+<p>其中的find方法就是封装的条件查询，代码如下：</p>
+<pre>
+/**
+ * 条件查询
+ * @param page 分页参数
+ * @param conditions 条件参数
+ * @param sort 排序字段
+ * @return 返回泛型的实体对象的list
+ */
+public List&lt;T&gt; find(Pagination page,
+                @Param(value = "conditions") List&lt;Condition&gt; conditions,
+                @Param(value = "sort") Sort sort);
+            </pre>
+
+<p>可以看到mybatis的父接口中已经为我们实现好了常用的基本DDL DML操作。</p>
+<p>而IBaseBiz中则对这些方法进行了一些变种封装，例如：</p>
+<p>只条件查询+分页，不排序，或只条件查询全部+排序，不分页等,如下：</p>
+<pre>
+...
+/**
+* 根据分页和条件进行查询。如果不需要分页，把pagination设为null。 主要是为了方便一个条件的查询，不用在调用时自己封装成List
+* @param pagination 分页参数
+* @param condition 查询条件
+* @return 泛型实体对象的list
+*/
+public List&lt;T&gt; find(Pagination pagination, Condition condition);
+/**
+* 根据分页和条件进行查询。如果不需要分页，把pagination设为null。
+*
+* @param pagination 分页参数
+* @param conditions 查询条件
+* @return 泛型实体对象的list
+*/
+public List&lt;T&gt; find(Pagination pagination, ConditionMap conditions);
+
+/**
+*
+* @param pagination 分页参数
+* @param conditions 查询条件
+* @param sort 排序字段条件
+* @return 泛型实体对象的list
+*/
+public List&lt;T&gt; find(Pagination pagination, ConditionMap conditions, Sort sort);
+...
+            </pre>
+<hr class="am-article-divider">
+<blockquote id="paragraph2">无需注入即可调用</blockquote>
+<p>在controller中调用自身泛型的service和service中调用自身泛型的dao无需经过spring的依赖注入。</p>
+<pre>
+public abstract  class BaseController &lt;M extends  BaseIncrementIdModel,S extends IBaseBiz&lt;M&gt;&gt; {
+
+    /**
+     *
+     */
+    protected List&lt;M&gt; dataList;
+    /**
+     * dao原型属性
+     */
+    protected S baseService;
+
+...
+
+
+public abstract class BaseBiz&lt;T extends BaseIncrementIdModel, K extends BaseDao&lt;T&gt;&gt; implements IBaseBiz&lt;T&gt; {
+
+	/**
+	 * dao原型属性
+	 */
+	protected K baseDao;
+
+	/**
+	 * 根据K泛型自动装载BaseDao
+	 * @param baseDao mybatis接口
+	 */
+	@Autowired
+	public final void setBaseDao(K baseDao) {
+		this.baseDao = baseDao;
+	}
+
+...
+            </pre>
+<p>BaseController和BaseBiz根据自己的泛型自动装载了一个baseService和baseDao，直接调用即可，具体参考<a href="javascript:;" onclick="routingPage('/content/1.1.0.3.RELEASE/c0010')">点击这里</a>。</p>
+
+<hr class="am-article-divider">
+<blockquote id="paragraph3">通过调用API实现自定义查询demo</blockquote>
+<p>接下来这个简单的例子没有实现任何dao层接口和sql，简单的几行代码即完成了一个条件查询，虽然这个查询操作也可以在controller中以以下形式调用，</p>
+<pre>baseService.find(null,condition);</pre>
+不过建议大家还是把方法写到service层，作为一个原子性的服务，提高代码复用性。
+因为逻辑方法写在controller中是没有事务托管的，一旦报错会造成数据没有回滚而导致数据不一致。
+
+<p>
+    <code>SysUserController.java</code>  controller
+</p>
+<pre>
+@RequestMapping(value = "findbyorgid")
+@ResponseBody
+public PageResult&lt;SysUser&gt; findUserByOrgID(@RequestParam("ordId")Object ordId,PageResult&lt;SysUser&gt; result){
+    result.setData(baseService.findUserByOrgID(ordId));
+    return result;
+}
+            </pre>
+<p>
+    <code>SysUserService.java</code>  service层
+</p>
+<pre>
+/**
+* 根据机构ID查找用户
+* @param ordId 机构ID
+* @return List&lt;SysUser&gt;
+*/
+List&lt;SysUser&gt; findUserByOrgID(Object ordId);
+            </pre>
+<p>
+    <code>SysUserServiceImpl.java</code>  service层的实现
+</p>
+<pre>
+@Override
+public List&lt;SysUser&gt; findUserByOrgID(Object ordId) {
+    Condition condition =  Condition.parseCondition("org_id@int@eq$");
+    condition.setValue(ordId);
+    return this.find(null,condition);
+}
+            </pre>
+<hr class="am-article-divider">
+<blockquote id="paragraph4">查询条件表达式</blockquote>
+<p>
+    上面的例子中<code>Condition.parseCondition("org_id@int@eq$");</code>参数为一个表达式。其结构分为三部分。
+</p>
+<p>字段名@数据类型@操作符</p>
+<p>数据类型的种类如下，一共三种，解释器会根据类型判断字段在sql中是否需要引号，并对其格式化：</p>
+<ul>
+    <li>string</li>
+    <li>date</li>
+    <li>int</li>
+</ul>
+<p>操作符的种类如下，一共七种</p>
+<ul>
+    <li>gt 表示 &gt;=</li>
+    <li>lt 表示 &lt;=</li>
+    <li>in 表示 in</li>
+    <li>condition 表示 condition</li>
+    <li>nq 表示 !=</li>
+    <li>like 表示 like</li>
+    <li>eq 表示 =</li>
+</ul>
+<p>此外BaseBiz中还提供了多个查询方法，还可以在API中设置分页，排序等参数，参考如下：</p>
+<pre>
+@Override
+public List&lt;SysUser&gt; findUserByOrgID(Object ordId) {
+    //设置分页参数
+    Pagination page = new Pagination();
+    page.setCurrentPage(0);
+    page.setPageSize(10);
+    //设置排序字段
+    Sort sort = new Sort();
+    sort.setOrderBy("id,username");
+    sort.setSort(Sort.DESC);
+    //设置查询条件
+    List&lt;Condition&gt; conditions = new ArrayList&lt;&gt;();
+    Condition condition =  Condition.parseCondition("org_id@int@eq$");
+    condition.setValue(ordId);
+    conditions.add(condition);
+    return this.find(page,conditions,sort);
+}
+            </pre>
+<hr class="am-article-divider">

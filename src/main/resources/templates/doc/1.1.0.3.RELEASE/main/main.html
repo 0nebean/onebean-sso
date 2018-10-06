@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="/public/head :: head(redis)"/>
+<link rel="stylesheet" th:href="@{/assets/css/doc.css}+${version}"/>
+<body>
+
+<!--content-->
+<header class="am-g my-head"></header>
+<hr class="am-article-divider"/>
+<div class="am-g am-g-fixed">
+    <div class="am-u-md-9 am-u-md-push-3">
+        <div class="am-g">
+            <div class="am-u-sm-11 am-u-sm-centered">
+                <div class="am-cf am-article doc-content">
+                    <h2>名由何来</h2>
+                    <p>Kepler是孤陋寡闻的作者听说现在兴这个科学家名来做项目的开发代号，苦于想不到好名字，github也懒得改，便顺其而为之，取自科学家约翰尼斯·开普勒先生的名字。</p>
+                    <hr class="am-article-divider">
+                </div>
+            </div>
+        </div>
+        <!--<th:block th:insert="/public/gotop :: gotop" />-->
+    </div>
+    <th:block th:insert="/doc/1.1.0.3.RELEASE/main/directory :: doc-directory" />
+    <a href="#sidebar" class="am-btn am-btn-sm am-btn-success am-icon-bars am-show-sm-only my-button" data-am-offcanvas>
+        <span class="am-sr-only">侧栏导航</span>
+    </a>
+</div>
+<!--content-->
+
+<th:block th:insert="/public/tips :: Tips"/>
+<th:block th:insert="/public/foot :: doc-foot"/>
+<th:block th:insert="/public/js :: js"/>
+<script th:inline="javascript">
+    $(function(){
+        let $url = '[(${doc_content_url})]';
+        routingPage($url);
+    })
+</script>
+</body>
+</html>

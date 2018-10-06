@@ -1,0 +1,27 @@
+<h2>生成代码</h2>
+<p>Kepler提供了一个好用的在线代码生成器，针对数据列表,树结构,一对多结构等生成增删改查的代码，并且生成的代码十分清爽，没有任何显性的实现，却已包含了增删改查功能。</p>
+
+<p>该功能使用起来也非常简单，我们首先去到：<strong>代码生成&gt;&gt;数据库模型</strong> 功能当中点击新建，创建一个数据库表的字段映射模型。</p>
+<p>我们首先需要选择一张表，值得一说的是，假如你这里没有任何选项，请在<code>application.properties</code>中检查你的数据库名<code>spring.datasource.databaseName</code>是否配置正确。</p>
+<ul data-am-widget="gallery" class="am-gallery  am-gallery-default" data-am-gallery="{pureview:{weChatImagePreview: false}}">
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0003.png}" class="">
+                <img th:src="@{/assets/img/img_0003.png}"  alt=""/>
+            </a>
+            <p>选择表后我们为其设置一些生成的必要信息，并可以为字段指定页面控件的类型，校验格式以及是否为列表筛选条件和筛选操作符。</p>
+        </div>
+    </li>
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0004.png}" class="">
+                <img th:src="@{/assets/img/img_0004.png}"  alt=""/>
+            </a>
+            <p>假如我们选择生成代码到页面，系统会要求我们完善菜单信息，生产成代码时系统会直接为其创建菜单和所有按钮权限，并在页面按钮和controller上加上权限标签和权限注解。</p>
+        </div>
+    </li>
+</ul>
+<p>生成代码之前可以任意修改数据库模型，点击保存并不会生成代码。</p>
+<p>保存后我们就可以看到生成代码按钮，点击生成代码即可在项目中创建代码文件，如果你在这一步报错或者生成的代码不完整，请检查配置文件中的freemarker配置，代码生成路径是否正确。</p>
+<p>生成完成后，重启项目就可以在菜单中直接看到生成好的功能，如果没有特殊要求功能已经可以直接使用。</p>
+<hr class="am-article-divider">

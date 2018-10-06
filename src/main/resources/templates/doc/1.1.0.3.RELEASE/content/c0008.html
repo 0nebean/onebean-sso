@@ -1,0 +1,27 @@
+<h2>项目访问前缀</h2>
+<p>我们有时可能需要改变项目的访问前缀，来适应同一个web容器下部署多个项目，或用nginx转发指定前缀请求到服务上。</p>
+<p>但随之会出现，自定义的ajax请求，并没有加上前缀导致404，为此我们需要做一些处理工作。</p>
+<p>首先我们去到application.properties中修改
+    <code>server.context-path</code>配置项为我们想要的前缀。
+</p>
+<p>该配置的修改会改变两个特性：</p>
+<ul>
+    <li>内置tomcat启动后需要加上这个前缀才能访问</li>
+    <li>所有的ajax请求地址会加上这个前缀（前提确保你的url加上了前缀）</li>
+</ul>
+<p>那么怎么给自定义的请求加上前缀呢？</p>
+<p>Kepler中已经帮你处理好了绝大部分请求的url的前缀，例如doGet，doPost，routingPage等方法，无需再额外处理。</p>
+如需自己处理前缀分为js中和html中两种情况：
+<ul>
+    <li>js中使用如下代码加工即可
+        <code>$url = addCtxToUrl($url);</code>
+    </li>
+    <li>
+        <p>html中使用thymeleaf表达式</p>
+        <code>&#91;(${ctx})&#93;</code>
+        或者
+        <code>th:href="${ctx}+'/index'"</code>
+        <p>分别对应内联和标签属性两种修改前缀方式。</p>
+    </li>
+</ul>
+<hr class="am-article-divider">

@@ -1,0 +1,30 @@
+<h2>数据权限</h2>
+<hr class="am-article-divider">
+<blockquote id="paragraph1">页面权限控制</blockquote>
+<p>Kepler中数据权限的做法参考了jeeplus 框架数据权限,在这里向其作者表示下感谢。</p>
+<p>在Kepler中数据权限是由用户的角色所决定的，多个角色则拥有多个数据权限级别，它们之间是用<code>OR</code>来连接的关系。</p>
+<p>角色管理中选择数据权限的设定如下：</p>
+<ul data-am-widget="gallery" class="am-gallery  am-gallery-default" data-am-gallery="{pureview:{weChatImagePreview: false}}">
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0012.png}" class="">
+                <img th:src="@{/assets/img/img_0012.png}"  alt=""/>
+            </a>
+        </div>
+    </li>
+</ul>
+<p>设置好数据权限后，并非所有的sql查询都已加上了数据权限过滤，需要你自己仅在你需要的sql上加上过滤条件。</p>
+<p>而数据权限的sql在 <code>net.onebean.kepler.common.dataPerm.DataPermUtils</code>中已经提供能生成的方法,其入参如下:</p>
+<pre>
+    /**
+     * 生成数据权限sql
+     * @param user 传入当前登录用户 用于获取用户所属机构及用户关联角色
+     * @param orgAlias 自定义sql中 机构表的别名 可以有多个别名 用','分割
+     * @param userAlias 自定义sql中 用户表的别名 可以有多个别名 用','分割
+     * @return 返回的结果中 hasDatePerm 标识sql是否为空,sql字段为数据权限拼接的sql
+     */
+    public Map&lt;String,Object&gt; dataPermFilter(SysUser u,
+                String orgAlias, String userAlias){
+            </pre>
+<p>最后我们只需判断该用户角色是否产生的数据权限sql，并将其拼接在我们自己的sql后，即可达到数据权限筛选的效果。</p>
+<hr class="am-article-ivider">

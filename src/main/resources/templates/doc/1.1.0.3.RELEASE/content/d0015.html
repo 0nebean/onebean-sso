@@ -1,0 +1,56 @@
+<h2>ajax</h2>
+<p>Kepler中对ajax也进行了统一的封装，并提供了以下功能的实现。</p>
+<ul>
+    <li>请求的url前缀加工<br><br></li>
+    <li>统一的进度条托管<br><br></li>
+    <li>统一的异常捕获和提示<br><br></li>
+</ul>
+<p>让我们来看下doGet方法的源码：</p>
+<pre>
+/**
+ * Http get 请求
+ * @param url 请求地址
+ * @param param 请求参数
+ * @param completeHandler 回调函数
+ */
+function doGet(url,param,completeHandler) {
+    url = addCtxToUrl(url);
+    $.AMUI.progress.start();
+    try{url=addbreadCrumbsToUrl(url)}catch(err){}//若没有面包屑 不做处理
+    $.ajax({
+        url:url,
+        type:"GET",//请求方式
+        dataType:"json",//返回参数的类型
+        contentType:"utf-8",//发送请求的编码方式
+        data:param,
+        success:function (data) {//请求成功后调用的函数
+            completeHandler(data);
+            $.AMUI.progress.done();
+        }
+    })
+}
+            </pre>
+<p>接下来我们分别展示两个简单的get请求和post请求的例子：</p>
+<code>post请求</code>
+<pre>
+        var param = $('#DataFrom').serializeJson();
+        var url = "/sysuser/save";
+        var completeHandler = function (data) {
+            ...
+        };
+        doPost(url,param,completeHandler);
+            </pre>
+<code>get请求</code>
+<pre>
+        doGet("/dic/list", param, function (res) {
+           ...
+        })
+            </pre>
+<p>此外Kepler中一共提供了一下几种ajax方法，请按照自己的业务场景进行选择：</p>
+<ul>
+    <li>doPost ==&gt; Http post 请求<br><br></li>
+    <li>doPostSync ==&gt; Http post 同步请求<br><br></li>
+    <li>doGet ==&gt; Http get 请求<br><br></li>
+    <li>doGetHtml ==&gt; Http get html 请求<br><br></li>
+</ul>
+<hr class="am-article-divider">

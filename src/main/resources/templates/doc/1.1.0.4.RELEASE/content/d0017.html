@@ -1,0 +1,109 @@
+<h2>字典</h2>
+<p>通常我们设计的数据库表字段会遇到一些枚举类型，Kepler中也提供了字典功能来维护这些字段枚举类型，并提供API在列表和详情页进行转义。</p>
+<ul>
+    <li><a href="#paragraph1">新建字典项</a><br><br></li>
+    <li><a href="#paragraph2">列表数据字典项转义</a><br><br></li>
+    <li><a href="#paragraph3">字典项页面控件</a><br><br></li>
+</ul>
+<hr class="am-article-divider">
+<blockquote id="paragraph1">新建字典</blockquote>
+<p>转义字典首先你得先有一个字典项，我们来到 <code>系统设置&gt;&gt;字典管理</code>中新建一组字典项。</p>
+<ul data-am-widget="gallery" class="am-gallery  am-gallery-default" data-am-gallery="{pureview:{weChatImagePreview: false}}">
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0006.png}" class="">
+                <img th:src="@{/assets/img/img_0006.png}"  alt=""/>
+            </a>
+            <p>字段作用如图。</p>
+        </div>
+    </li>
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0007.png}" class="">
+                <img th:src="@{/assets/img/img_0007.png}" alt=""/>
+            </a>
+        </div>
+    </li>
+</ul>
+<hr class="am-article-divider">
+<blockquote id="paragraph2">列表数据字典项转义</blockquote>
+<p>net.onebean.kepler.common.dictionary.DictionaryUtils类在框架启动时将字典项都储存在内存中的一个散列表内，并提供了根据code获取字典项含义等静态方法,如下:</p>
+<pre>
+    /**
+     * 获取字典词组
+     * @param code
+     * @return
+     */
+    public static List&lt;DicDictionary&gt; getDicGroup(String code){
+      ...
+    }
+
+    /**
+     * 获取字典数据
+     * @param code
+     * @return
+     */
+    public static String dic(String code,String val){
+        ...
+    }
+          </pre>
+<p>不过我们再controller中给数据列表中的字段转义，并不需要我们自己遍历数据，替换字典值，controller的基类中已经提供了这一方法，如下：</p>
+<pre>
+    /**
+     * 给数据list包装字典
+     * @param dataListParam 数据列表
+     * @param args 可变参数表达式
+     * 'SF$is_lock' 参数前半段为字典的code后半段是字段名用$隔开
+     */
+    protected void dicCoverList(List&lt;M&gt; dataListParam,String...args){
+        ...
+    }
+
+    /**
+     * 给数据tree包装字典
+     * @param childListKey model中子节点字段名
+     * @param dataListParam 数据列表
+     * @param args 可变参数表达式
+     * @return List&lt;M&gt;
+     */
+    protected List&lt;M&gt; dicCoverTree(String childListKey,
+            List&lt;M&gt; dataListParam,String...args){
+        ...
+    }
+          </pre>
+<p>方法过长，这里我们只简述一下实现方式，首先为了更好的操作字段，我们将List序列化成jsonArray，我们运用了lambda的表达式流化了jsonArray，并利用可变参数匹配对象的字段进行字典值替换，最终利用反射获取调用该方法的controller类的上的泛型model类型的class进行反序列化。</p>
+<p>假如这句话你没听懂没有关系，你只需要知道如果你加工的是List&lt;SysUser&gt;,那么你只能在SysUserController上调用这个方法。</p>
+<p>我们可以看到注释上可变参数上表达式例子，如果你还不明白，接下来我将用一行代码来展示该API如何调用：</p>
+<pre>list =
+            dicCoverList(lsit,"dic@SF$is_lock",
+            "dic@YHLX$user_type",
+            "date@creat_time$");
+          </pre>
+<p>从这行列子中我们还可以看到该API除了转义字典还可以格式化时间？没错，API中对表达式的操作符做了判断，进行了不同的处理，源码如下：</p>
+<pre>
+    switch(type)
+          {
+            case "date":
+                ...格式化时间
+                break;
+            case "dic":
+                ...转义字典
+                break;
+            default:
+                break;
+        }
+          </pre>
+<hr class="am-article-divider">
+<blockquote id="paragraph3">字典项页面控件</blockquote>
+<p>字典项控件如下：</p>
+<code>&lt;dic:code code="SJQX"/&gt;</code>
+<ul data-am-widget="gallery" class="am-gallery  am-gallery-default" data-am-gallery="{pureview:{weChatImagePreview: false}}">
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0008.png}" class="">
+                <img th:src="@{/assets/img/img_0008.png}"  alt=""/>
+            </a>
+        </div>
+    </li>
+</ul>
+<hr class="am-article-divider">

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="/public/head :: head(Kepler)"/>
+<link rel="stylesheet" th:href="@{/assets/css/index.css}+${version}"/>
+<body>
+
+<header class="am-topbar am-topbar-fixed-top">
+    <div class="am-container">
+        <h1 class="am-topbar-brand">
+            <a href="#">Kepler</a>
+        </h1>
+
+        <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only"
+                data-am-collapse="{target: '#collapse-head'}"><span class="am-sr-only">导航切换</span> <span
+                class="am-icon-bars"></span></button>
+
+        <div class="am-collapse am-topbar-collapse" id="collapse-head">
+            <ul class="am-nav am-nav-pills am-topbar-nav">
+                <li class="am-active"><a href="#">框架介绍</a></li>
+                <li><a href="https://github.com/0nebean/net.onebean.kepler">项目源码</a></li>
+                <li><a href="javascript:;" th:onclick="'javascript:goUrl(\''+${doc_url}+'\')'">在线文档</a></li>
+                <li class="am-dropdown" data-am-dropdown>
+                    <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+                        框架组件 <span class="am-icon-caret-down"></span>
+                    </a>
+                    <ul class="am-dropdown-content">
+                        <li class="am-dropdown-header">标题</li>
+                        <li><a href="/doc/1.1.0.4.RELEASE/z0001">阿里云oss</a></li>
+                        <li><a href="/doc/1.1.0.4.RELEASE/z0002">阿里云短信</a></li>
+                        <li><a href="/doc/1.1.0.4.RELEASE/z0003">mongoDB</a></li>
+                        <li><a href="/doc/1.1.0.4.RELEASE/z0004">redis</a></li>
+                    </ul>
+            </ul>
+            <div class="am-topbar-right">
+                <button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"
+                        onclick="goUrl('https://www.jianshu.com/u/2bb3ca25a3e0')">
+                    <span class="am-icon-book"></span> 简书
+                </button>
+            </div>
+
+            <div class="am-topbar-right">
+                <button class="am-btn am-btn-primary am-topbar-btn am-btn-sm"
+                        onclick="goUrl('https://github.com/0nebean')">
+                    <span class="am-icon-github"></span> github
+                </button>
+            </div>
+        </div>
+
+</header>
+
+<div class="get">
+    <div class="am-g">
+        <div class="am-u-lg-12 index-banner">
+            <h1 class="get-title">Kepler - 简单 快速 主流 安全</h1>
+            <p>
+                Kepler是一个完全免费的j2ee开源框架
+            </p>
+
+            <p>
+                <a href="/doc/1.1.0.4.RELEASE/c0007" class="am-btn am-btn-sm get-btn">如何开始</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="detail">
+    <div class="am-g am-container">
+        <div class="am-u-lg-12">
+            <h2 class="detail-h2">松耦合,多模块,多端程序最大程度共用代码</h2>
+
+            <div class="am-g">
+                <div class="am-u-lg-3 am-u-md-6 am-u-sm-12 detail-mb">
+
+                    <h3 class="detail-h3">
+                        <i class="am-icon-mobile am-icon-sm"></i>
+                        主流技术 简单上手 低门槛
+                    </h3>
+
+                    <p class="detail-p">
+                        框架后端基于spring framework 4, spring boot
+                        1.5,主流的渐进式框架,orm基于mybatis和自定义的sqlSessionFactory实现了默认的增删改查方法,效率高,简单易上手。
+                    </p>
+                </div>
+                <div class="am-u-lg-3 am-u-md-6 am-u-sm-12 detail-mb">
+                    <h3 class="detail-h3">
+                        <i class="am-icon-cogs am-icon-sm"></i>
+                        组件丰富，模块化
+                    </h3>
+
+                    <p class="detail-p">
+                        框架前端基于AmazeUI+art-template丰富的生态库可拓展,后端基于松耦合的多模块设计,现有众多可插拔组件如:redis、mongoDB、aliyun-oss、aliyun-sms等,并且组件库生态完全开源。
+                    </p>
+                </div>
+                <div class="am-u-lg-3 am-u-md-6 am-u-sm-12 detail-mb">
+                    <h3 class="detail-h3">
+                        <i class="am-icon-check-square-o am-icon-sm"></i>
+                        精细的权限验证
+                    </h3>
+
+                    <p class="detail-p">
+                        项目权限控制基于spring security实现,健壮性不言而喻,前后台双重验证,密码经过SHA256+秘钥+行内随机盐加密储存,精细的权限验证从根本上避免常见注入攻击。
+                    </p>
+                </div>
+                <div class="am-u-lg-3 am-u-md-6 am-u-sm-12 detail-mb">
+                    <h3 class="detail-h3">
+                        <i class="am-icon-send-o am-icon-sm"></i>
+                        一键生成代码菜单及权限
+                    </h3>
+
+                    <p class="detail-p">
+                        框架内置生成代码工具,提供包含增删改查的列表,树结构,一对多结构等功能的一键代码生成,并自动生成菜单和权限,如果对外观要求不是很高，生成的功能就可以用了。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="hope">
+    <div class="am-g am-container">
+        <div class="am-u-lg-4 am-u-md-6 am-u-sm-12 hope-img">
+            <img th:src="@{/assets/i/examples/landing.png}" alt="" data-am-scrollspy="{animation:'slide-left', repeat: false}">
+            <hr class="am-article-divider am-show-sm-only hope-hr">
+        </div>
+        <div class="am-u-lg-8 am-u-md-6 am-u-sm-12">
+            <h2 class="hope-title">丰富的组件库生态</h2>
+            <p>Kepler本身是一个松耦合多模块的j2ee的快速开发框架,并不直接适用与大型分布式应用,作者开发其初心是想为自己开发中小型企业应用提供一把利器,并预留出可拓展组件模式供大家后续一起为框架添柴加火。</p>
+        </div>
+    </div>
+</div>
+
+<div class="about">
+    <div class="am-g am-container">
+        <div class="am-u-lg-12">
+            <h2 class="about-title about-color">关于作者</h2>
+
+            <div class="am-g">
+                <!--<div class="am-u-lg-6 am-u-md-4 am-u-sm-12">-->
+                    <!--<form class="am-form">-->
+                        <!--<label for="name" class="about-color">你的姓名</label>-->
+                        <!--<input id="name" type="text">-->
+                        <!--<br/>-->
+                        <!--<label for="email" class="about-color">你的邮箱</label>-->
+                        <!--<input id="email" type="email">-->
+                        <!--<br/>-->
+                        <!--<label for="message" class="about-color">你的留言</label>-->
+                        <!--<textarea id="message"></textarea>-->
+                        <!--<br/>-->
+                        <!--<button type="submit" class="am-btn am-btn-primary am-btn-sm"><i class="am-icon-check"></i> 提 交-->
+                        <!--</button>-->
+                    <!--</form>-->
+                    <!--<hr class="am-article-divider am-show-sm-only">-->
+                <!--</div>-->
+
+                <div class="am-u-lg-12 am-u-md-12 am-u-sm-12">
+                    <h4 class="about-color">关于0neBean</h4>
+
+                    <p>0neBean是一个热爱技术,乐于思考的90后软件从业者,本着解决手头上没有特别顺手的开发利器这一初衷开发了这套框架,本人不才,报以生也有涯,知也无涯的心态仍在每天学习,如有设计不当的地方还望不吝赐教。</p>
+                    <h4 class="about-color">或许可以为Kepler出分力</h4>
+                    <div class="am-dropdown am-dropdown-up" data-am-dropdown>
+                        <a href="" class="am-dropdown-toggle">微信收款</a>
+                        <ul data-am-widget="gallery" class="am-gallery  am-gallery-default am-dropdown-content" data-am-gallery="{pureview:{weChatImagePreview: false}}">
+                            <li>
+                                <div class="am-gallery-item">
+                                    <a th:href="@{/assets/img/weixin.jpg}" class="">
+                                        <img th:src="@{/assets/img/weixin.jpg}" alt=""/>
+                                        <h3 class="am-gallery-title">点击图片放大</h3>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="am-dropdown am-dropdown-up" data-am-dropdown>
+                        <a href="" class="am-dropdown-toggle">支付宝收款</a>
+                        <ul data-am-widget="gallery" class="am-gallery  am-gallery-default am-dropdown-content" data-am-gallery="{pureview:{weChatImagePreview: false}}">
+                            <li>
+                                <div class="am-gallery-item">
+                                    <a th:href="@{/assets/img/alipay.jpg}" class="">
+                                        <img th:src="@{/assets/img/alipay.jpg}" alt=""/>
+                                        <h3 class="am-gallery-title">点击图片放大</h3>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <p>0neBean是一个有工作自给自足的普通人,开发框架并不需要大家资助,只有官网服务器会产生一些费用,如果框架能帮到你解决问题,或许能为官网维护出一份力,谢谢,捐赠是自愿的。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:insert="/public/tips :: Tips"/>
+<th:block th:insert="/public/foot :: index-foot"/>
+<th:block th:insert="/public/js :: js" />
+</body>
+</html>

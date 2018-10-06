@@ -1,0 +1,44 @@
+<h2>多标签与路由</h2>
+<p>Kepler中提供了多标签和路由两种页面切换交互形式，效果如下图所示，接下来我们分别看下这两种交互怎么工作。</p>
+<ul data-am-widget="gallery" class="am-gallery  am-gallery-default" data-am-gallery="{pureview:{weChatImagePreview: false}}">
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0017.png}" class="">
+                <img th:src="@{/assets/img/img_0017.png}"  alt=""/>
+            </a>
+        </div>
+    </li>
+</ul>
+<ul>
+    <li><a href="#paragraph1">多标签跳转</a><br><br></li>
+    <li><a href="#paragraph2">路由与面包屑</a><br><br></li>
+</ul>
+<hr class="am-article-divider">
+<blockquote id="paragraph1">多标签跳转</blockquote>
+<p>Kepler中为多标签跳转提供了两种形式的API，分别为从菜单上打开标签，和从标签中打开标签分别如下所示：</p>
+<pre>
+/**
+ * 标签页跳转标签页
+ * @param target 触发按钮自身
+ */
+function tabToTab(target) {
+  ...
+}
+
+/**
+ * 新开标签
+ * @param target 触发按钮自身
+ */
+var openNewTab = function (target) {
+  ...
+}
+          </pre>
+<hr class="am-article-divider">
+<blockquote id="paragraph2">路由与面包屑</blockquote>
+<p>Kepler中路由的API非常简单，你只需要在页面中以下面这行代码进行页面跳转即可：</p>
+<code>routingPage('/dic/preview','字典管理');</code>
+<p>入参分别是需要跳转的url地址和面包屑标题，当然面包屑的显示需要在页面中引入面包屑控件：</p>
+<pre>
+&lt;th:block th:include="/public/breadCrumbs :: breadCrumbsTempl"/&gt;
+          </pre>
+<hr class="am-article-ivider">

@@ -1,0 +1,121 @@
+@media only screen and (min-width: 641px) {
+    .am-offcanvas {
+        display: block;
+        position: static;
+        background: none;
+    }
+
+    .am-offcanvas-bar {
+        position: static;
+        width: auto;
+        background: none;
+        -webkit-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    .am-offcanvas-bar:after {
+        content: none;
+    }
+    .outer-container,.content {
+        width: 230px;
+        height: 800px;
+    }
+
+}
+
+@media only screen and (max-width: 640px) {
+    .am-offcanvas-bar .am-nav>li>a {
+        color:#ccc;
+        border-radius: 0;
+        border-top: 1px solid rgba(0,0,0,.3);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.05)
+    }
+
+    .am-offcanvas-bar .am-nav>li>a:hover {
+        background: #404040;
+        color: #fff
+    }
+
+    .am-offcanvas-bar .am-nav>li.am-nav-header {
+        color: #777;
+        background: #404040;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+        text-shadow: 0 1px 0 rgba(0,0,0,.5);
+        border-top: 1px solid rgba(0,0,0,.3);
+        font-weight: 400;
+        font-size: 75%
+    }
+
+    .am-offcanvas-bar .am-nav>li.am-active>a {
+        background: #1a1a1a;
+        color: #fff;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,.3)
+    }
+
+    .am-offcanvas-bar .am-nav>li+li {
+        margin-top: 0;
+    }
+}
+
+.my-head {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.my-button {
+    position: fixed;
+    top: 0;
+    right: 0;
+    border-radius: 0;
+}
+.my-sidebar {
+    padding-right: 0;
+    border-right: 1px solid #eeeeee;
+}
+
+.my-footer {
+    border-top: 1px solid #eeeeee;
+    padding: 10px 0;
+    margin-top: 10px;
+    text-align: center;
+}
+
+
+.outer-container {
+    position: relative;
+    overflow: hidden;
+}
+.inner-container {
+    position: absolute; left: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+/* for Chrome */
+.inner-container::-webkit-scrollbar {
+    display: none;
+}
+
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+.outer-container ::-webkit-scrollbar
+{
+    width: 3px;
+    height: 1px;
+    background-color: #F5F5F5;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+.outer-container ::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+/*定义滑块 内阴影+圆角*/
+.outer-container ::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #555;
+}

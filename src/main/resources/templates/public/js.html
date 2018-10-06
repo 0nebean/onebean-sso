@@ -1,0 +1,13 @@
+<js  th:fragment="js">
+    <!--[if lt IE 9]>
+    <script th:src="@{http://libs.baidu.com/jquery/1.11.1/jquery.min.js}+${version}"></script>
+    <script th:src="@{http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js}+${version}"></script>
+    <script th:src="@{/assets/js/amazeui.ie8polyfill.min.js}+${version}"></script>
+    <![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script th:src="@{/assets/js/jquery.min.js}+${version}"></script>
+    <!--<![endif]-->
+    <script th:src="@{/assets/js/amazeui.min.js}+${version}"></script>
+    <script th:src="@{/assets/js/bin.js}+${version}"></script>
+</js>

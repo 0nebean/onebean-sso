@@ -1,0 +1,30 @@
+<h2>框架结构</h2>
+<ul>
+    <li><a href="#paragraph1">所有模块都依赖spring</a><br><br></li>
+    <li><a href="#paragraph2">模块含义</a><br><br></li>
+</ul>
+
+<blockquote id="paragraph1">所有模块都依赖spring</blockquote>
+<p>Kepler是一个由maven构建的聚合项目，项目整体的父pom又依赖于net.onebean.spring.boot这个基础pom。</p>
+<p>net.onebean.spring.boot中对spring boot进行了依赖，并指定了一些全局的版本信息，仅此而已。</p>
+<p>和Kepler一样，所有的Kepler的组件也依赖了net.onebean.spring.boot，这样一来所有组件都能以spring风格的api进行编程，也可以简单通过pom依赖低耦合的在项目中进行插拔。</p>
+
+<hr class="am-article-divider">
+<blockquote id="paragraph2">模块含义</blockquote>
+<p>Kepler中包含以下子模块</p>
+<pre>
+    &lt;modules&gt;
+        &lt;module&gt;net.onebean.kepler.dao&lt;/module&gt;
+        &lt;module&gt;net.onebean.kepler.service&lt;/module&gt;
+        &lt;module&gt;net.onebean.kepler.security&lt;/module&gt;
+        &lt;module&gt;net.onebean.kepler.action&lt;/module&gt;
+        &lt;module&gt;net.onebean.kepler.web&lt;/module&gt;
+    &lt;/modules&gt;
+          </pre>
+<p>其中各自对应的含义如下，并且他们按照自下而上的顺序依赖。</p>
+<p>dao   ===>orm层</p>
+<p>service  ===>服务层 提供了统一的申明式的事务管理</p>
+<p>security  ===>由spring security实现的权限控制层</p>
+<p>action  ===>controller层</p>
+<p>web  ===>web项目层包含了静态资源，模板和项目配置及程序入口</p>
+<hr class="am-article-divider">

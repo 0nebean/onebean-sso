@@ -1,0 +1,15 @@
+<h2>上传文件到OSS</h2>
+<p>Kepler中提供了一个上传你项目中所有静态资源到阿里云OSS上的工具类，以实现动静分离。</p>
+<pre>net.onebean.kepler.web\src\test\java\net\onebean\kepler\OSSUploadResourcesTool.java</pre>
+<p>直接运行即可，但是要注意的一点是该工具类依赖了 <a href="javascript:;" onclick="routingPage('/content/1.1.0.4.RELEASE/z0001')">net.onebean.aliyun.oss</a>模块。</p>
+<p>当你的静态资源全部上传到oss上后，若想在项目中加载oss上的静态资源，你只需修改application.properties中的<code>server.oss.context-path</code>为oss访问地址即可，如下：</p>
+<ul data-am-widget="gallery" class="am-gallery  am-gallery-default" data-am-gallery="{pureview:{weChatImagePreview: false}}">
+  <li>
+    <div class="am-gallery-item">
+      <a th:href="@{/assets/img/img_0018.png}" class="">
+        <img th:src="@{/assets/img/img_0018.png}"  alt=""/>
+      </a>
+    </div>
+  </li>
+</ul>
+<hr class="am-article-ivider">

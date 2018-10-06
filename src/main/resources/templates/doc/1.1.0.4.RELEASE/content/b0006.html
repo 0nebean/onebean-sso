@@ -1,0 +1,31 @@
+<h2>多端项目共用代码</h2>
+<p>假如你需要在Kepler中构建多端项目，是十分简单一项的工作,你可以完全自定义依赖，按照自己的需求选择共用代码的部分。</p>
+<p>首先你需要重新建立一个web项目，参考上一章关于配置的描述，将web模块中5个java config和5个配置文件全部复制到正确的目录。</p>
+<p>然后在pom选择依赖你需要的模块。</p>
+<p>如果你需要的只是一个前段项目的API模块，只想和后台共用dao和service层，那你只需要在pom里直接依赖service即可，因为service已经依赖了dao。</p>
+<pre>
+  &lt;dependencies&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;net.onebean&lt;/groupId&gt;
+            &lt;artifactId&gt;net.onebean.kepler.service&lt;/artifactId&gt;
+            &lt;version&gt;${kepler.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+
+  &lt;/dependencies&gt;
+          </pre>
+<p>如果你还需要权限控制，只需要在pom里依赖security即可，无需再依赖service，因为security已经依赖了service。</p>
+<pre>
+  &lt;dependencies&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;net.onebean&lt;/groupId&gt;
+            &lt;artifactId&gt;net.onebean.kepler.security&lt;/artifactId&gt;
+            &lt;version&gt;${kepler.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+
+  &lt;/dependencies&gt;
+          </pre>
+<hr class="am-article-divider">
+<p>这样你就会发现，你的业务模型里很多查询方法都已经实现过，无需再次再新的项目里重写，直接在你的controller中调用即可。</p>
+<hr class="am-article-divider">

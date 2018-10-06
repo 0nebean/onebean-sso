@@ -1,0 +1,54 @@
+<h2>controller及页面权限控制</h2>
+<ul>
+
+    <li><a href="#paragraph1">页面权限控制</a><br><br></li>
+    <li><a href="#paragraph2">controller权限控制</a><br><br></li>
+
+</ul>
+<hr class="am-article-divider">
+<blockquote id="paragraph1">页面权限控制</blockquote>
+<p>页面的权限控制标签基于thymeleaf的拓展 <a href="https://github.com/thymeleaf/thymeleaf-extras-springsecurity">thymeleaf-extras-springsecurity4</a>，主要由以下几种标签表达式构成:  </p>
+<pre>
+  &lt;p ... sec:authorize="hasRole('ROLE_USER')"&gt;
+      拥有‘ROLE_USER’角色的人才能查看
+  &lt;/p&gt;
+
+  &lt;p ... sec:authorize-url = "/sysuser/preview"&gt;
+      有权限访问‘/sysuser/preview’的人才能查看
+  &lt;/p&gt;
+
+  &lt;p ... sec:authorize="isAuthenticated()"&gt;
+      登录才能查看
+  &lt;/p&gt;
+
+  &lt;p ... sec:authentication="name"&gt;
+      显示登录用户的登录名
+  &lt;/p&gt;
+
+  &lt;p ... sec:authorize="hasPermission('$everyone','PERM_USER_SETTING')"&gt;
+      拥有‘PERM_USER_SETTING’权限的用户可以查看
+  &lt;/p&gt;
+
+  &lt;p ... sec:authorize="hasPermission('abel','/')"&gt;
+      登录名为abel的用户可以查看
+  &lt;/p&gt;
+            </pre>
+<p>建议大家在设计程序的时候尽可能的避免使用 <code>sec:authorize="hasRole(...)"</code>，因为用户在生产环境有可能会重新建角色，导致角色名和代码里的不匹配而无法正确判断权限。</p>
+<hr class="am-article-divider">
+<blockquote id="paragraph1">controller权限控制</blockquote>
+<p>在controller中进行权限控制的方式和页面上的做法大同小异，表达式部分是完全一样的，只不过写在注解中：</p>
+<pre>
+    /**
+     * 保存
+     * @param entity 实体
+     * @param result 结果集
+     * @return PageResult&lt;SysUser&gt;
+     */
+    @RequestMapping(value = "save")
+    @ResponseBody
+    @PreAuthorize("hasPermission('$everyone','PERM_USER_SAVE')")
+    public PageResult&lt;SysUser&gt; save(SysUser entity, PageResult&lt;SysUser&gt; result) {
+		...
+    }
+          </pre>
+<hr class="am-article-ivider">

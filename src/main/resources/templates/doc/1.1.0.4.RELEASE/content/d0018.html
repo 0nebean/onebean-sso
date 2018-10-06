@@ -1,0 +1,21 @@
+<h2>从表达式中获取参数对象</h2>
+<p>之前的章节中已经介绍，Kepler中拥有在页面上直接进行一些自定义条件查询的控件，这得益于
+    <a href="javascript:;" onclick="routingPage('/content/1.1.0.4.RELEASE/c0011')">条件查询API</a>。
+</p>
+<p>但是如果你在线生成了代码，同时又有需要跨表查询的需求，无法利用API进行查询，你会发现controller从前台获取的参数都是一些表达式，令人头痛。</p>
+<p>不过不用担心，Kepler中提供了一个将前端控件传来的表达式转换成javaBean的API，供你自定义查询。</p>
+<code>net.onebean.kepler.core.BaseController</code>
+<pre>
+        /**
+         * 将前台的查询参数通过反射获取class 反序列化成M model
+         * @param conditionStr 字符串拼接的表达式
+         * @param sort 可为null
+         * @param page 可为null
+         * @return 实体
+         */
+        protected M reflectionModelFormConditionMapStr(String conditionStr,
+                Sort sort,Pagination page){
+            ...
+        }
+            </pre>
+<hr class="am-article-divider">

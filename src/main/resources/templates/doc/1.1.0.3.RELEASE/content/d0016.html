@@ -1,0 +1,17 @@
+<h2>字典</h2>
+<p>Kepler中的页面模板由后端模板
+  <a href="https://www.thymeleaf.org/">thymeleaf</a>
+  和前端模板
+  <a href="http://aui.github.io/art-template/zh-cn/">art-template</a>
+  组成，二者在各自擅长的部分各司其职，使得整个框架的页面更清爽，可读性更高。</p>
+<hr class="am-article-divider">
+<p>对于二者的API，作者不想做更多重复的搬运，请大家移步到他们各自的官网上查阅，且不建议大家零散的百度某种API，官网API很详细，且版本版本更新更准确，因版本更新较快，百度很多说法已经过时。</p>
+<p>看不懂可以翻译着看，英文阅读能力对一个程序员来说尤为重要。</p>
+<p>在此作者将给出一些实用的经验和观点。</p>
+<blockquote id="paragraph1">thymeleaf 3.x</blockquote>
+<p>thymeleaf 2.x使用xml解析引擎解析html语法上要求标签完全闭合，且引擎体量较大，在3.x 其作者中已将引擎替换成了自研的引擎，此做对之前的API进行了毁灭性的改造。</p>
+<p>不过不用担心，页面标签的写法几乎没有改变，但是如果你自定义了标签，可能就需要重构，而且很多API无处可寻，作者曾向thymeleaf作者提问过如何在java代码中获取thymeleaf定义的html代码块，用于自定义页面控件。</p>
+<p>苦于thymeleaf活跃解答问题时间已是两年前，后作者下载了thymeleaf 3.x源码进行了研究后，在其源码中找到了相关API，自己解决了问题，或许可以帮助到你，相关问题的
+  <a href="https://github.com/thymeleaf/thymeleaf/issues/399">github</a>。
+</p>
+<hr class="am-article-divider">

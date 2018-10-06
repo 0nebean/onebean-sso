@@ -1,0 +1,36 @@
+<h2>系统权限功能</h2>
+<p>值得一说的是Kepler中已经预置了一些系统功能也会左右权限的控制，你可以对其稍加利用，便可应对一些常见的业务场景。</p>
+<hr class="am-article-divider">
+<blockquote id="paragraph1">禁用功能</blockquote>
+<p>Kepler中系统用户和角色都有禁用功能，在你将系统用户禁用以后，该用户将不能登录，并抛出账号不存在的异常。同样你将角色禁用后，已绑定该角色的用户将失去该角色下拥有的权限，并且其他用户将无法绑定该锁定的角色。</p>
+<ul data-am-widget="gallery" class="am-gallery  am-gallery-default" data-am-gallery="{pureview:{weChatImagePreview: false}}">
+  <li>
+    <div class="am-gallery-item">
+      <a th:href="@{/assets/img/img_0013.png}" class="">
+        <img th:src="@{/assets/img/img_0013.png}"  alt=""/>
+        <h3 class="am-gallery-title">角色管理中禁用角色</h3>
+      </a>
+    </div>
+  </li>
+  <li>
+    <div class="am-gallery-item">
+      <a th:href="@{/assets/img/img_0014.png}" class="">
+        <img th:src="@{/assets/img/img_0014.png}"  alt=""/>
+        <h3 class="am-gallery-title">用户管理中锁定用户</h3>
+      </a>
+    </div>
+  </li>
+  <hr class="am-article-divider">
+  <blockquote id="paragraph2">用户类型</blockquote>
+  <p>Kepler中为用户预置了两种用户类型，一种为面向业务的<code>普通用户</code>角色，另一种为面向开发的<code>系统管理员</code>角色，如果你在用户管理中将某个用户设为管理员类型，那么该用户将拥有所有的菜单权限，这样你就不用频繁的为你新开发的功能添加权限才能进行调试。</p>
+  <li>
+    <div class="am-gallery-item">
+      <a th:href="@{/assets/img/img_0015.png}" class="">
+        <img th:src="@{/assets/img/img_0015.png}"  alt=""/>
+        <h3 class="am-gallery-title">用户管理中调整用户类型</h3>
+      </a>
+    </div>
+  </li>
+</ul>
+
+<hr class="am-article-ivider">

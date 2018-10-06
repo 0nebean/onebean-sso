@@ -1,0 +1,89 @@
+<h2>自定义一个查询</h2>
+<p>现在我将用框架里现有的一个例子，展示一下多表联合查询在Kepler中如何实现。</p>
+<p>
+    <code>SysUserMapper.xml</code> mapper文件
+</p>
+<pre>
+    &lt;!--SysUser对象中roles字段与其为一对多的映射关系--&gt;
+    &lt;resultMap id="userMap" type="net.onebean.kepler.model.SysUser"&gt;
+        &lt;id property="id" column="ID"/&gt;
+        &lt;result property="username" column="username"/&gt;
+        &lt;result property="password" column="PASSWORD"/&gt;
+        &lt;collection property="roles" ofType="net.onebean.kepler.model.SysRole"&gt;
+            &lt;result column="name" property="name"/&gt;
+        &lt;/collection&gt;
+    &lt;/resultMap&gt;
+
+    &lt;!--根据用户名查询出用户及其拥有的所有的角色--&gt;
+    &lt;select id="findByUserName" parameterType="string" resultMap="userMap"&gt;
+		select u.* ,r.name from sys_User u
+        LEFT JOIN sys_role_user sru on u.id= sru.sys_user_id
+        LEFT JOIN sys_role r on sru.sys_role_id=r.id
+        where u.username= #{username} and u.is_lock = '0'
+    &lt;/select&gt;
+          </pre>
+<p>
+    <code>SysUserDao.java</code> mybatis接口
+</p>
+<pre>
+    /**
+     *根据用户名查询出用户及其拥有的所有的角色
+     * @param username 用户名
+     * @return SysUser
+     */
+    SysUser findByUserName(@Param("username")String username);
+            </pre>
+<p>
+    <code>SysUserService.java</code> 为了更灵活的实现service层，我们对service做了一层抽象
+</p>
+<pre>
+    /**
+     * 根据用户名查询出用户及其拥有的所有的角色
+     * @param username
+     * @return
+     */
+    SysUser findByUserName(String username);
+            </pre>
+<p>
+    <code>SysUserServiceImpl.java</code>  service层的实现
+</p>
+<pre>
+    @Override
+    public SysUser findByUserName(String username) {
+        return baseDao.findByUserName(username);
+    }
+            </pre>
+<p>
+    <code>SysUserController.java</code>  controller
+</p>
+<pre>
+    @RequestMapping(value = "findurs")
+    @ResponseBody
+    public SysUser findUserRoles(@RequestParam("username") String username){
+       return baseService.findByUserName(username);
+    }
+            </pre>
+<hr class="am-article-divider">
+<p>至此所有代码编写完成，我们访问这个controller。</p>
+<p>Kepler中为spring指定了json的converters，所有返回的javaBean都会被fastjson序列化成json格式，在前台接收时无需做转换。</p>
+<P>application.properties中已有如下配置</P>
+<pre>spring.http.converters.preferred-json-mapper=fastjson</pre>
+<p>所以访问controller我们会获得如下json</p>
+<pre>
+{
+    "username": "admin",
+    "password": "...",
+    "roles": [
+        {
+            "name": "ROLE_ADMIN",
+            "base_sort": "",
+            "base_orderBy": ""
+        }
+    ],
+    "id": 1,
+    "base_sort": "",
+    "base_orderBy": ""
+}
+            </pre>
+<p>那么接下一章我将演示如何通过调用简单的查询API来完成单表查询操作。</p>
+<hr class="am-article-divider">

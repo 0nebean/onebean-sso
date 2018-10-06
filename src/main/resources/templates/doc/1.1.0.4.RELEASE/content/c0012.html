@@ -1,0 +1,33 @@
+<h2>热调试</h2>
+<p>如果你需要在项目中进行热调试，首先你需要将dao层所依赖的core源码包检出到Kepler同一工作空间下。</p>
+<p>net.onebean.core包的<a href="https://github.com/0nebean/net.onebean.core">github地址</a></p>
+<ul data-am-widget="gallery" class="am-gallery  am-gallery-default" data-am-gallery="{pureview:{weChatImagePreview: false}}">
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0005.png}" class="">
+                <img th:src="@{/assets/img/img_0005.png}"  alt=""/>
+            </a>
+        </div>
+    </li>
+</ul>
+<p>net.onebean.core引用了
+    <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-devtools.html">spring boot 热调试工具</a>
+    ：</p>
+<pre>
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+            &lt;scope&gt;runtime&lt;/scope&gt;
+        &lt;/dependency&gt;
+            </pre>
+<p>该包会检查项目中classPath中的文件变动，如果法发现文件变动会自动重启项目。</p>
+<p>值得一说的是该工具支持LiveReload，去下载
+    <a href="https://livereload.com/extensions/">LiveReload</a>
+    的浏览器插件，浏览器会和后台建立一个websocket，检测到重启后，会自动刷新浏览器。</p>
+<pre>
+20.3 LiveReload
+The spring-boot-devtools module includes an embedded LiveReload server that can be used to trigger a browser refresh when a resource is changed. LiveReload browser extensions are freely available for Chrome, Firefox and Safari from livereload.com.
+
+If you do not want to start the LiveReload server when your application runs, you can set the spring.devtools.livereload.enabled property to false.
+            </pre>
+<hr class="am-article-divider">

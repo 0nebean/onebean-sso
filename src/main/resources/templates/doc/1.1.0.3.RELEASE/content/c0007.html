@@ -1,0 +1,35 @@
+<h2>运行项目</h2>
+<p>运行Kepler非常简单，首先你需要去github上获取Kepler的源码，
+    <a href="https://github.com/0nebean/net.onebean.kepler">点击这里获取源码</a>。
+</p>
+<p>下载好源码后，直接导入项目的父pom到你的IDE中，即
+    <code>/net.onebean.kepler/pom.xml</code>。
+</p>
+<p>然后执行数据库初始化脚本:
+<pre>
+\net.onebean.kepler\net.onebean.kepler.web\src\main\resources\sql\initSql.sql
+            </pre>
+</p>
+<p>数据库初始化完成后直接运行KeplerMain.java中的main方法就可以尝试以以下路径进行访问了。</p>
+<a href="http://localhost:8080" target="_blank">http://localhost:8080</a><br><br>
+
+<ul data-am-widget="gallery" class="am-gallery  am-gallery-default" data-am-gallery="{pureview:{weChatImagePreview: false}}">
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0001.png}" class="">
+                <img th:src="@{/assets/img/img_0001.png}"  alt=""/>
+            </a>
+        </div>
+    </li>
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0002.png}" class="">
+                <img th:src="@{/assets/img/img_0002.png}" alt=""/>
+                <h3 class="am-gallery-title">默认密码为admin:123456</h3>
+            </a>
+        </div>
+    </li>
+</ul>
+
+<p>done!</p>
+<hr class="am-article-divider">

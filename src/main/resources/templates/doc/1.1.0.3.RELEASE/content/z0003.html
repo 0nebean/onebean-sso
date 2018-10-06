@@ -1,0 +1,198 @@
+<h2>MongoDB</h2>
+<p> <a href="https://github.com/0nebean/net.onebean.mongo">net.onebean.mongo</a>是Kepler组件库中优秀的组件之一,基于对 <a href="https://projects.spring.io/spring-data-mongodb/">spring-boot-starter-data-mongodb</a>封装，提供了对MongoDB操作的一系列API，并按Kepler中的代码分层风格为其实现了一套默认的增删改查API。</p>
+<p>更幸运的是，你甚至都不用关心这些，因为Kepler中还为你提供了一套生成代码的工具类。</p>
+<p>那么让我们分几步来说清楚它是如何工作的。</p>
+<ul>
+    <li><a href="#paragraph1">准备一个mongoDB</a><br><br></li>
+    <li><a href="#paragraph2">使用工具类生成代码</a><br><br></li>
+    <li><a href="#paragraph3">API结构与功能</a><br><br></li>
+    <li><a href="#paragraph4">利用API完成保存及查询功能</a><br><br></li>
+    <li><a href="#paragraph5">自定义一个分页mongoDB查询</a><br><br></li>
+</ul>
+<hr class="am-article-ivider">
+<p>让我们在开始前</p>
+<p>在 <code>net.onebean.kepler.dao</code>组件的pom.xnml中引入以下依赖：</p>
+<pre>
+    &lt;dependency&gt;
+        &lt;groupId&gt;net.onebean&lt;/groupId&gt;
+        &lt;artifactId&gt;net.onebean.mongo&lt;/artifactId&gt;
+        &lt;version&gt;${onebean.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+            </pre>
+<hr class="am-article-ivider">
+<blockquote id="paragraph1">准备一个mongoDB</blockquote>
+<p>首先你需要有一个MongoDB服务，参考这里：<a href="https://www.jianshu.com/p/0af32170fc14">linux安装MongoDB</a>。</p>
+<p>然后建立test数据库。</p>
+<ul data-am-widget="gallery" class="am-gallery  am-gallery-default" data-am-gallery="{pureview:{weChatImagePreview: false}}">
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0019.png}" class="">
+                <img th:src="@{/assets/img/img_0019.png}" alt=""/>
+            </a>
+        </div>
+    </li>
+    <hr class="am-article-ivider">
+    <blockquote id="paragraph2">使用工具类生成代码</blockquote>
+    <p>接着我们运行 <code>net.onebean.kepler.CreateMongoJavaTool</code>,输入DTO的类名。</p>
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0020.png}" class="">
+                <img th:src="@{/assets/img/img_0020.png}" alt=""/>
+                <h3 class="am-gallery-title"></h3>
+            </a>
+        </div>
+    </li>
+
+    <p>点击确定后工具为我们生成了相应的的代码，如下：</p>
+    <pre>
+net.onebean.kepler.model.mongo.Hello
+net.onebean.kepler.dao.mongo.HelloDao
+net.onebean.kepler.service.mongo.HelloService
+net.onebean.kepler.service.impl.mongo.HelloServiceImpl
+            </pre>
+    <hr class="am-article-ivider">
+    <blockquote id="paragraph3">API结构与功能</blockquote>
+    <p>生成的每个类都继承了一个基类，对应的作用如下：</p>
+    <p>Hello ===> BaseModelMongo ===> mongodb model的基类</p>
+    <p>HelloDao ===> BaseMongoDao ===> 封装了数据库基本操作</p>
+    <p>HelloService ===> IBaseMongoBiz ===> 对BaseMongoDao的API封装成了常用查询方法</p>
+    <p>HelloServiceImpl ===> BaseMongoBiz ===> IBaseMongoBiz的实现</p>
+    <hr class="am-article-ivider">
+    <blockquote id="paragraph4">利用API完成保存及查询功能</blockquote>
+    <p>我们可以发现继承了 <code>IBaseMongoBiz</code>接口的 <code>HelloService.java</code>已经包含了增删改查方法，接下来两个简单的列子演示一下利用API完成保存及查询功能：</p>
+    <p>首先我们给model添加一些成员变量作为数据库字段。</p>
+    <pre>
+@SuppressWarnings("serial")
+public class Hello extends BaseModelMongo{
+
+    private String name;
+    private int age;
+
+    ...省略getter&Setter...
+}
+                </pre>
+    <p>无需实现任何代码实现controller中直接保存数据：</p>
+    <pre>
+  @RequestMapping("/savemongo")
+  @ResponseBody
+  public  Map&lt;String, Object&gt; savemongo(){
+    Map&lt;String, Object&gt; result = new HashMap&lt;&gt;();
+    try {
+      for (int i = 1; i &lt; 11; i++) {
+        Hello hello = new Hello();
+        hello.setName("0neBean");
+        hello.setAge(i);
+        helloService.save(hello);
+      }
+      result.put("flag", true);
+    } catch (Exception e) {
+      result.put("flag", false);
+    }
+    return result;
+  }
+            </pre>
+    <p>访问接口后，数据库中产生了这些数据。</p>
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0021.png}" class="">
+                <img th:src="@{/assets/img/img_0021.png}" alt=""/>
+                <h3 class="am-gallery-title"></h3>
+            </a>
+        </div>
+    </li>
+    <p>无需实现任何代码实现在controller中根据ID查找数据：</p>
+    <pre>
+  @RequestMapping("/findmongobyid")
+  @ResponseBody
+  public Hello findmongoById(@RequestParam("id") String id){
+    //id=5b1687e4e0faa042dc8d648e
+    return helloService.findById(id);
+  }
+            </pre>
+    <p>访问接口后得到如下结果：</p>
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0022.png}" class="">
+                <img th:src="@{/assets/img/img_0022.png}" alt=""/>
+                <h3 class="am-gallery-title"></h3>
+            </a>
+        </div>
+    </li>
+    <hr class="am-article-ivider">
+    <blockquote id="paragraph5">自定义一个分页mongoDB查询</blockquote>
+    <p>如果我们需要自定义一个复杂的分页排序查询呢？下面一个简单的列子演示：</p>
+    <code>HelloDao.java</code>
+    <pre>
+public class HelloDao extends BaseMongoDao&lt;Hello&gt; {
+    ...
+    /**
+     * 根name分页查询
+     * @param name 用户名
+     * @param currentPage 当前页s
+     * @param pageSize 分页条数
+     * @return MongoPagination&lt;Hello&gt;
+     */
+    public MongoPagination&lt;Hello&gt; findHelloByName (String name,
+                Integer currentPage, Integer pageSize){
+        //查询条件
+        Query query = new Query(Criteria.where("name").is(name));
+        //排序
+        Sort sort = new Sort(Sort.Direction.DESC,"name");
+        //分页结果集
+        MongoPagination&lt;Hello&gt; pagination = new MongoPagination &lt;&gt;();
+        pagination.setCurrentPage(currentPage);
+        pagination.setPageSize(pageSize);
+        return super.findPage(pagination, query.with(sort));
+    }
+    ...
+}
+                </pre>
+    <code>HelloService.java</code>
+    <pre>
+public interface HelloService extends IBaseMongoBiz&lt;Hello&gt; {
+  ...
+     /**
+      * 根据年龄查找用户
+      * @param name 用户名
+      * @param currentPage 当前页s
+      * @param pageSize 分页条数
+      * @return List&lt;Hello&gt;
+      */
+     MongoPagination&lt;Hello&gt; findHelloByName(String name,
+                    Integer page, Integer size);
+  ...
+}
+                </pre>
+    <code>HelloServiceImpl.java</code>
+    <pre>
+public class HelloServiceImpl extends BaseMongoBiz&lt;Hello, HelloDao&gt; implements HelloService{
+  ...
+
+    @Override
+    public MongoPagination&lt;Hello&gt; findHelloByName(String name, Integer page, Integer size) {
+        return  baseMongoDao.findHelloByName(name, page, size);
+    }
+  ...
+}
+                </pre>
+    <code>controller代码</code>
+    <pre>
+@RequestMapping("/findmongo")
+@ResponseBody
+public MongoPagination&lt;Hello&gt; findmongoById(@RequestParam("name") String name,
+                        @RequestParam("page")Integer page,
+                        @RequestParam("size")Integer size){
+    return helloService.findHelloByName(name,page,size);
+}
+                </pre>
+    <p>我们直接访问这个controller会得到如下结果：</p>
+    <li>
+        <div class="am-gallery-item">
+            <a th:href="@{/assets/img/img_0023.png}" class="">
+                <img th:src="@{/assets/img/img_0023.png}" alt=""/>
+                <h3 class="am-gallery-title"></h3>
+            </a>
+        </div>
+    </li>
+</ul>
+<hr class="am-article-ivider">

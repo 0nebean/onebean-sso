@@ -1,0 +1,42 @@
+<h2>页面数据组装</h2>
+<p>我们通常会有将表单数据序列化成json，通过ajax提交到后台的业务场景。Kepler中也提供了一些应对这种场景的API。</p>
+<ul>
+    <li><a href="#paragraph1">表单数据序列化成json</a><br><br></li>
+    <li><a href="#paragraph2">一对多的表单序列化成json</a><br><br></li>
+</ul>
+<hr class="am-article-divider">
+<blockquote id="paragraph1">表单数据序列化成json</blockquote>
+<code>var param = $('#DataFrom').serializeJson();</code>
+<p>一行简单的代码实现该功能，让我们简单看下源码了解一下实现原理：</p>
+<pre>
+    /**
+     * 序列化from成json
+     * @returns {{}}
+     */
+    $.fn.serializeJson = function() {
+        var arr = this.serializeArray();
+        var json = {};
+        arr.forEach(function(item) {
+            var name = item.name;
+            var value = trim(item.value);
+
+            if (!json[name]) {
+                json[name] = value;
+            } else if ($.isArray(json[name])) {
+                json[name].push(value);
+            } else {
+                json[name] = [json[name], value];
+            }
+        });
+        return json;
+    }
+            </pre>
+<p>jquery中提供了一个<code>serializeArray()</code>方法，已经实现了返回表单数据数组的方法，在此之上我将它组装成了json。</p>
+<hr class="am-article-divider">
+<blockquote id="paragraph2">一对多的表单序列化成json</blockquote>
+<pre>
+        var parent = $('#DataFrom').serializeJson();
+        var param = $('#ChildDataFrom').serializeChildListJson(parent);
+            </pre>
+<p>在此基础上还提供了一对多的数据结构的序列化，将父json传入序列化子节点的方法，获得一个最终的json。</p>
+<hr class="am-article-divider">

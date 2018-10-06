@@ -1,0 +1,28 @@
+<h2>阿里云短信</h2>
+<p> <a href="https://github.com/0nebean/net.onebean.aliyun.sms">net.onebean.aliyun.sms</a>是Kepler组件库中的组件之一，提供了对阿里云短信服务的封装。</p>
+<p>使用该组件非常简单，在 <code>net.onebean.kepler.service</code>组件的pom.xnml中引入以下依赖即可：</p>
+<pre>
+    &lt;dependency&gt;
+        &lt;groupId&gt;net.onebean&lt;/groupId&gt;
+        &lt;artifactId&gt;net.onebean.aliyun.sms&lt;/artifactId&gt;
+        &lt;version&gt;${net.onebean.aliyun.sms.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+            </pre>
+<p>Kepler中提供了对阿里云短信服务的封装，其调用方法非常简单只有一个API，如下：</p>
+<code>net.onebean.component.aliyun.AliyunSMSUtils</code>
+<pre>
+    /**
+     * 发送短信接口
+     * @param smsSignature 短信签名
+     * @param smsTemplate 短信模板ID
+     * @param phoneNumber 手机号码
+     * @param templateParamJsonStr 短信模板参数json
+     * @return AliyunSmsSendResult
+     */
+    public static AliyunSmsSendResult sendSms(String smsSignature,
+                String smsTemplate, String phoneNumber,
+                String templateParamJsonStr) {
+           ...
+    }
+            </pre>
+<hr class="am-article-ivider">

@@ -1,0 +1,55 @@
+<h2>spring security配置详解</h2>
+<ul>
+
+    <li><a href="#paragraph1">实现原理</a><br><br></li>
+    <li><a href="#paragraph1">文件结构</a><br><br></li>
+
+</ul>
+<hr class="am-article-divider">
+<blockquote id="paragraph1">实现原理</blockquote>
+<p>权限控制通常是项目开发中难度较高的一个环节，让我们来梳理一下通常权限管理的实现方式。</p>
+<p>通常权限控制设计为了保证性能，会在每个用户登录时将其拥有的所有角色和这些角色拥有的所有权限查出来放在session，或将session再放到缓存中提高性能。</p>
+<p>spring security也无例外的使用了类似的原理进行了抽象封装和默认实现。</p>
+<p>spring security以配置难度高著称，其实不然，spring 项目API通常以继承，覆盖默认实现的方式进行接口暴露，了解这一点配置就非常简单。</p>
+<hr class="am-article-divider">
+<blockquote id="paragraph2">文件结构</blockquote>
+<p>Kepler的权限控制层有独立的模块实现，防止你有可能需要构建CMS结构的项目，那样你的前台是不需要权限控制的，并且你依然可以通过避开security层，直接依赖dao和service共用代码。</p>
+<p>那么让我们来看下 <code>net.onebean.kepler.security</code>模块中的代码结构。</p>
+<p>所有配置代码一共11个类，让我们分析一下他们各自的作用。</p>
+<ul>
+    <li>OneBeanWebSecurityConfig.java</li>
+    <li>OneBeanInvocationSecurityMetadataSourceService.java</li>
+    <li>OneBeanAccessDecisionManager.java</li>
+    <li>OneBeanAuthenticationFailureHandler.java</li>
+    <li>OneBeanCustomUserService.java</li>
+    <li>OnebeanDigester.java</li>
+    <li>OneBeanFilterSecurityInterceptor.java</li>
+    <li>OneBeanPasswordEncoder.java</li>
+    <li>OneBeanPermissionEvaluator.java</li>
+    <li>OneBeanWebInvocationPrivilegeEvaluator.java</li>
+    <li>SpringSecurityUtil.java</li>
+</ul>
+<p>为了能更简明的阐述，我将用一句话概括一下每个类的作用，以便让你更好地理解security全局的运作方式，具体的代码实现你可以去到对应的代码中做进一步了解。</p>
+<code>OneBeanWebSecurityConfig.java:</code>
+<p>spring security的配置入口。</p>
+<code>OneBeanInvocationSecurityMetadataSourceService.java:</code>
+<p>加载了所有用户的权限资源到内存中,供security使用，减少了据库查询次数，做了性能加速。</p>
+<code>OneBeanAccessDecisionManager.java:</code>
+<p>自定义实现的security拦截器,指定了权限校验规则类 OneBeanAccessDecisionManager</p>
+<code>OneBeanAccessDecisionManager.java:</code>
+<p>实现了具体的权限校验方法</p>
+<code>OneBeanWebInvocationPrivilegeEvaluator.java:</code>
+<p>对应sec:authorize-url标签功能的实现</p>
+<code>OneBeanPermissionEvaluator.java:</code>
+<p>对应sec:hasPermission标签功能的实现</p>
+<code>OneBeanPasswordEncoder.java:</code>
+<p>提供随机盐+秘钥+SHA256算法加密的用户密码加解密工具类</p>
+<code>OnebeanDigester.java:</code>
+<p>生成算法加密对象工具类</p>
+<code>OneBeanAuthenticationFailureHandler.java:</code>
+<p>统一权限错误抛出托管类</p>
+<code>OneBeanCustomUserService.java:</code>
+<p>spring security 根据用户名查找相对应权限的方法实现</p>
+<code>SpringSecurityUtil.java:</code>
+<p>提供了获取当前登录用户和登录用户所有权限的方法的工具类，需要传入HttpcontrollerRequest</p>
+<hr class="am-article-ivider">

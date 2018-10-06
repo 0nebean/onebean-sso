@@ -1,0 +1,23 @@
+<h2>配置文件读取</h2>
+<p>Kepler和spring boot共用了配置文件</p>
+<pre>net.onebean.kepler.web\src\main\resources\application.properties</pre>
+<p>在 <code>net.onebean.core</code>模块中的 <code>net.onebean.util.PropUtil</code>提供了读写配置文件的方法：</p>
+<pre>
+    /**
+     * 获取配置
+     */
+    public static String getConfig(String key) {
+        ...
+    }
+
+    /**
+     * 写入properties信息
+     *
+     * @param key 名称
+     * @param value 值
+     */
+    public static void modifyConfig(String key, String value) {
+        ...
+    }
+          </pre>
+<hr class="am-article-ivider">

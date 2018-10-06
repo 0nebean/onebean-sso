@@ -1,0 +1,35 @@
+<h2>错误排查</h2>
+<p>Kepler中对异常集中做了统一处理，通常我们在开发调试阶段希望尽可能抛出异常以便更快定位问题，这时我们注释掉两个地方可以使异常更快的抛出。</p>
+<pre>
+// 设置jQuery Ajax全局错误catch
+$.ajaxSetup({
+    type: "POST",
+    error: function (jqXHR, textStatus, errorThrown) {
+        switch (jqXHR.status) {
+            ...
+        }
+        $.AMUI.progress.done();
+    }
+});
+            </pre>
+<pre>
+package net.onebean.kepler.web.action.error;
+
+import net.onebean.kepler.web.action.login.LoginController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.controller.http.HttpcontrollerRequest;
+import javax.controller.http.HttpSession;
+
+/**
+ * 统一异常处理类
+ * @author 0neBean
+ */
+@RequestMapping("error")
+@Controller
+public class ErrorController {
+    ...
+}
+            </pre>
+<hr class="am-article-ivider">

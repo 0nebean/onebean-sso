@@ -1,0 +1,105 @@
+<h2>配置详解</h2>
+<p>Kepler中的配置主要分为两个目录下的文件，分别是:</p>
+<ul>
+    <li><a href="#paragraph1">Java Config</a><br><br></li>
+    <li><a href="#paragraph2">模板配置文件</a><br><br></li>
+</ul>
+
+<blockquote id="paragraph1">Java Config</blockquote>
+
+<p>Java Config位于 <code>net.onebean.kepler.web</code>项目中 <code>net.onebean.spring</code>包下，共有五个配置配置类：</p>
+<pre>
+        DataSourceConfig.java
+        MybatisConfig.java
+        SqlSessionFactoryCongifg.java
+        TransactionalConfig.java
+        KeplerMain.java
+          </pre>
+<p>其中各自对应的含义如下，</p>
+<p>DataSourceConfig  ==> 数据源配置</p>
+<p>MybatisConfig  ==> mybatis配置</p>
+<p>SqlSessionFactoryCongifg  ==> SqlSessionFactory配置</p>
+<p>TransactionalConfig  ==> 声明式事务配置</p>
+<p>KeplerMain  ==> 项目入口</p>
+
+<p>其具体配置内容如下：</p>
+<hr class="am-article-divider">
+<code>DataSourceConfig.java</code>
+<p>数据源配置类中定义了三个Bean，分别是：</p>
+<p>dataSource指定了数据库连接池为阿里巴巴的druid连接池，</p>
+<p>controllerRegistrationBean是druid的监控页面的controller，</p>
+<p>以及监控的过滤器FilterRegistrationBean。</p>
+
+<hr class="am-article-divider">
+<code>MybatisConfig.java</code>
+<p>mybatis配置类指定了mybatis抽象接口，mapper扫描包路径，和sqlSessionFactory</p>
+
+<hr class="am-article-divider">
+<code>SqlSessionFactoryCongifg.java</code>
+<p>SqlSessionFactoryCongifg指定了我们自定义的SqlSessionFactory，实现自org.mybatis.spring.SqlSessionFactoryBean，用来生成虚拟mapper文件和指定加载mybatis的自定义插件（分页耗时统计等...）。</p>
+<p>其具体作用可以参考<a href="javascript:;" onclick="routingPage('/content/1.1.0.3.RELEASE/a0003#paragraph1')">Kepler设计思想</a></p>
+
+<hr class="am-article-divider">
+<code>TransactionalConfig.java</code>
+<p>TransactionalConfig定义了Bean transactionManager，用来进行声明式事务管理。</p>
+<p>其具体的事务管理规则在下面将要说道的transactionConfig.xml中定义。</p>
+
+<hr class="am-article-divider">
+<code>KeplerMain.java</code>
+<p>项目入口，实现了spring boot的一些必要配置和一些包扫描配置。</p>
+
+
+<hr class="am-article-divider">
+<blockquote id="paragraph2">模板及配置文件</blockquote>
+<p>Kepler模板和配置文件都位于 <code>net.onebean.kepler.web</code>模块的 <code>resources</code>目录下：</p>
+<pre>
+            common_mapper.xml
+            createSql.vm
+            mybatis.xml
+            transactionConfig.xml
+            application.properties
+          </pre>
+<p>其中各自对应的含义如下，</p>
+<p>common_mapper.xml  ==> 用于定义SqlSessionFactoryBean中自定义查询条件的mapper文件</p>
+<p>createSql.vm  ==> 用于生成包含增删改查mapper xml流的模板文件</p>
+<p>transactionConfig.xml ==> 申明式事务的具体规则</p>
+<p>application.properties  ==> 项目全局配置文件</p>
+
+<hr class="am-article-divider">
+<p>这里我们重点需要了解一下transactionConfig.xml和application.properties</p>
+<p>首先看下transactionConfig.xml</p>
+<pre>
+&lt;!-- 使用annotation定义事务 --&gt;
+&lt;tx:advice id="txAdvice" transaction-manager="transactionManager"&gt;
+    &lt;tx:attributes&gt;
+        &lt;tx:method name="find*" read-only="true" /&gt;
+        &lt;tx:method name="get*" read-only="true" /&gt;
+        &lt;tx:method name="save*" propagation="REQUIRED" /&gt;
+        &lt;tx:method name="market*" propagation="REQUIRED" /&gt;
+        &lt;tx:method name="add*" propagation="REQUIRED" /&gt;
+        &lt;tx:method name="update*" propagation="REQUIRED" /&gt;
+        &lt;tx:method name="submit*" propagation="REQUIRED" /&gt;
+        &lt;tx:method name="remove*" propagation="REQUIRED" /&gt;
+        &lt;tx:method name="copy*" propagation="REQUIRED" /&gt;
+        &lt;tx:method name="delete*" propagation="REQUIRED" /&gt;
+        &lt;tx:method name="discard*" propagation="REQUIRED" /&gt;
+        &lt;tx:method name="retrieve*" propagation="REQUIRED" /&gt;
+        &lt;tx:method name="query*" propagation="REQUIRED" read-only="true" /&gt;
+        &lt;tx:method name="select*" propagation="REQUIRED" read-only="true" /&gt;
+        &lt;tx:method name="*" propagation="REQUIRED" rollback-for="Exception" /&gt;
+    &lt;/tx:attributes&gt;
+&lt;/tx:advice&gt;
+
+&lt;!-- 事务粒度锁 切面到所有service方法 --&gt;
+&lt;aop:config proxy-target-class="true"&gt;
+    &lt;aop:pointcut expression="execution(public * net.onebean.kepler.service..*.*(..))" id="tranPointcut" /&gt;
+    &lt;aop:advisor advice-ref="txAdvice" pointcut-ref="tranPointcut" order="2" /&gt;
+&lt;/aop:config&gt;
+          </pre>
+<p>我们可以看到默认配置已经对许多常用方法名单独开启了事务或只读事务，并对所有抛出Exception的方法开启了事务，并将事务回滚切面到所有service包下的所有方法上。</p>
+<p>所以要想保证事务在异常抛出后正常回滚，所有的业务方法必须写在serice层，而不是controller中。</p>
+
+<hr class="am-article-divider">
+<p>application.properties中则具体定义了各种扫描包的路径，数据库地址配置，数据库名和生成代码的路径。</p>
+<p>如果你要更改了包名，某些功能异常或者不能启动，请检查application.properties中的配置包名是否全部更改。</p>
+<hr class="am-article-divider">

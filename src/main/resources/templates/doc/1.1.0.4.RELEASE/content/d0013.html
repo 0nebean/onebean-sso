@@ -1,0 +1,66 @@
+<h2>数据列表控件</h2>
+<p>得益于Kepler的条件查询API，无需手写任何sql或java代码就可以实现一个条件查询，当然Kepler也提供了一些页面控件，
+    实现了分页，条件查询，限制条数等功能，通过这些控件你可以很轻松的在页面上完成各种查询操作。</p>
+<p>代码生成器为我们生成的代码包含list.html和detail.html，分别是列表页与详情页。</p>
+<p>作用于列表页控件如下：</p>
+<ul>
+    <li><a href="#paragraph1">条件搜索控件</a><br><br></li>
+    <li><a href="#paragraph2">条件下拉选择控件</a><br><br></li>
+    <li><a href="#paragraph3">分页页码控件</a><br><br></li>
+    <li><a href="#paragraph4">数据排序控件</a><br><br></li>
+    <li><a href="#paragraph5">分页数量控件</a><br><br></li>
+</ul>
+
+<hr class="am-article-divider">
+<blockquote id="paragraph1">条件搜索控件</blockquote>
+<p>$("from[class='paramFrom']")中的$("input[class='paramInput']")是一个搜索条件，具体的搜索规则通过input上的一个属性'param-pattern'来指定。</p>
+<p>param-pattern的值为一个查询条件表达式，关于表达式请参考
+    <a href="javascript:;" onclick="routingPage('/content/1.1.0.4.RELEASE/c0011#paragraph4')">这里</a>，一个按照用户名字段筛选数据的例子如下：
+</p>
+<pre>
+        &lt;input type="text"
+                class="... paramInput"
+                param-pattern="username@string@like$"
+                placeholder="请输入用户名"&gt;
+            </pre>
+<hr class="am-article-divider">
+<blockquote id="paragraph2">条件下拉选择控件</blockquote>
+<p>如果你的筛选条件是一个字典值，那么就更简单了，你只需要直接使用'dic'标签即可，例子如下：</p>
+<pre>
+        &lt;dic:code  code="YHLX" param-pattern="user_type@string@eq$"/&gt;
+            </pre>
+<hr class="am-article-divider">
+<blockquote id="paragraph3">分页页码控件</blockquote>
+<p>分页的页码控件只需一行代码引入页面即可，如下：</p>
+<pre>
+        &lt;script id="tpl-pagination" type="text/html"
+        th:replace="/public/pagination :: paginationTemplate"/&gt;
+            </pre>
+<P>所有的分页信息都封装在\templates\public\pagination.html中，不需要你再做任何配置。</P>
+<p>pagination.html中我们可以看到构建分页我们需要一些必要的参数都已经在net.onebean.core.Pagination中封装好，基类中的分页查询中都会包含该类。</p>
+<p>如果你需要自定义分页，并使用此分页控件，你可以模仿Pagination的数据结构在你的json中返回必要分页参数。</p>
+<hr class="am-article-divider">
+<blockquote id="paragraph4">数据排序控件</blockquote>
+<p>在$("from[class='paramFrom']")中的$("select[id='orderBySelector']")是一个列表排序的控件。</p>
+<p>其中每个option标签的值为一种筛选条件，并支持多个字段排序，下面是个简单的例子：</p>
+<pre>
+        &lt;select data-am-selected="{btnSize: 'sm'}" id="orderBySelector"&gt;
+          &lt;option value="id-asc" selected&gt;ID升序&lt;/option&gt;
+          &lt;option value="id-desc"&gt;ID降序&lt;/option&gt;
+          &lt;option value="id,username-asc"&gt;用户名升序&lt;/option&gt;
+          &lt;option value="username-desc"&gt;用户名降序&lt;/option&gt;
+        &lt;/select&gt;
+            </pre>
+<hr class="am-article-divider">
+<blockquote id="paragraph5">分页数量控件</blockquote>
+<p>在$("from[class='paramFrom']")中的$("select[id='limitSelector']")是一个分页数量控件控件。</p>
+<p>其中选中的option标签的值为每页数据限制的条数：</p>
+<pre>
+        &lt;select data-am-selected="{btnSize: 'sm'}" id="limitSelector"&gt;
+            &lt;option value="5"&gt;5&lt;/option&gt;
+            &lt;option value="10" selected&gt;10&lt;/option&gt;
+            &lt;option value="30"&gt;30&lt;/option&gt;
+            &lt;option value="50"&gt;50&lt;/option&gt;
+        &lt;/select&gt;
+            </pre>
+<hr class="am-article-divider">

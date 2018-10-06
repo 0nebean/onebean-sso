@@ -1,0 +1,126 @@
+<h2>redis</h2>
+<p> <a href="https://github.com/0nebean/net.onebean.redis">net.onebean.redis</a>是Kepler组件库中组件,
+    基于对 <a href="https://projects.spring.io/spring-data-redis/">spring-boot-starter-data-redis</a>封装，
+    提供了对redis操作的若干spring风格API，如下所示，我们使用时只需要注入<code>IRedisService</code>即可。</p>
+<p>此外 <code>net.onebean.component</code>包下还有一个基于gson封装 <code>JSONUtil.java</code>，提供各种json操作，为redis数据序列化和反序列化。</p>
+<p>使用该组件非常简单，在 <code>net.onebean.kepler.service</code>组件的pom.xnml中引入以下依赖即可：</p>
+<pre>
+    &lt;dependency&gt;
+        &lt;groupId&gt;net.onebean&lt;/groupId&gt;
+        &lt;artifactId&gt;net.onebean.redis&lt;/artifactId&gt;
+        &lt;version&gt;${onebean.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+            </pre>
+<code>net.onebean.component.redis</code>
+<pre>
+/**
+ * redis封装
+ * @ClassName: IRedisService
+ * @Description: TODO
+ * @author: 0neBean
+ * @date: 2017年9月4日 下午3:02:19
+ */
+public interface IRedisService {
+    /**
+     * 缓存值并设定时效
+     * @Title: set
+     * @Description: TODO
+     * @param key
+     * @param value
+     * @return
+     * @return: boolean
+     */
+    public boolean set(String key, String value,long time);
+    /**
+     * 缓存值
+     * @Title: set
+     * @Description: TODO
+     * @param key
+     * @param value
+     * @return
+     * @return: boolean
+     */
+    public boolean set(String key, String value);
+    /**
+     * 根据key获取缓存中的值
+     * @Title: get
+     * @Description: TODO
+     * @param key
+     * @return
+     * @return: String
+     */
+    public String get(String key);
+      /**
+       * 缓存list
+       * @Title: setList
+       * @Description: TODO
+       * @param key
+       * @param list
+       * @return
+       * @return: boolean
+       */
+    public &lt;T&gt; boolean setList(String key ,List&lt;T&gt; list);
+      /**
+       * 根据key获取缓存中的list
+       * @Title: getList
+       * @Description: TODO
+       * @param key
+       * @param clz
+       * @return
+       * @return: List&lt;T&gt;
+       */
+    public &lt;T&gt; List&lt;T&gt; getList(String key,Class&lt;T&gt; clz);
+      /**
+       * 在key对应list的头部添加字符串元素
+       * @Title: lpush
+       * @Description: TODO
+       * @param key
+       * @param obj
+       * @return
+       * @return: long
+       */
+    public long lpush(String key,Object obj);
+      /**
+       * 在key对应list的尾部添加字符串元素
+       * @Title: rpush
+       * @Description: TODO
+       * @param key
+       * @param obj
+       * @return
+       * @return: long
+       */
+    public long rpush(String key,Object obj);
+      /**
+       * 在key对应list上移除并返回list的最后一个元素
+       * @Title: lpop
+       * @Description: TODO
+       * @param key
+       * @return
+       * @return: String
+       */
+    public String lpop(String key);
+            </pre>
+
+<p>一个简单的调用示例演示如何向redis中读写值：</p>
+<pre>
+@RequestMapping("/redisSave")
+@ResponseBody
+public Map&lt;String, Object&gt; redisSave(
+                @RequestParam("value") String value,
+                @RequestParam("key") String key) {
+    Map&lt;String, Object&gt; result = new HashMap&lt;String, Object&gt;();
+    result.put("flag", iRedisService.set(key, value, 1000*30));
+    return result;
+}
+
+@RequestMapping("/redisFind")
+@ResponseBody
+public Map&lt;String, Object&gt; redisFind(
+                @RequestParam("key") String key) {
+    Map&lt;String, Object&gt; result = new HashMap&lt;String, Object&gt;();
+    result.put("res", iRedisService.get(key));
+    return result;
+}
+            </pre>
+
+<hr class="am-article-ivider">
